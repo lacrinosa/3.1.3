@@ -18,4 +18,6 @@ public interface UserService {
     public void deleteUser(Long id);
 
     public void addUser(User user);
+
+    void changePassword(Long id, String newPassword);
 }

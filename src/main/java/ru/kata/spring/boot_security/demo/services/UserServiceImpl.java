@@ -45,6 +45,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public void changePassword(Long id, String newPassword) {
+        User user = getUserById(id);
+        // Шифруем новый пароль перед сохранением
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
     @Transactional
     @Override
     public void updateUser(long id, User updatedUser) {
