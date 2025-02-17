@@ -25,14 +25,8 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         User user = (User) o;
 
-        if (userServiceImpl.findByUsername(user.getUsername()) != null) {
-            User userFromDb = userServiceImpl.findByUsername(user.getUsername());
-            if (!userFromDb.getId().equals(user.getId())) {
-                errors.rejectValue("username", "", "Username already exists");
-            }
-        }
-        if (userServiceImpl.findByEmail(user.getEmail()) != null) {
-            User userFromDb = userServiceImpl.findByEmail(user.getEmail());
+        if (userServiceImpl.findByUsername(user.getEmail()) != null) {
+            User userFromDb = userServiceImpl.findByUsername(user.getEmail());
             if (!userFromDb.getId().equals(user.getId())) {
                 errors.rejectValue("email", "", "Email already exists");
             }

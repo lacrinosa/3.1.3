@@ -6,10 +6,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -25,14 +22,18 @@ public class User {
     @Pattern(regexp = "^[a-zA-Z ]+$", message = "Name must not contain numbers")
     @NotEmpty(message = "Name should not be empty")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
-    @Column(name = "username", unique = true)
-    private String username;
+    @Column(name = "name")
+    private String name;
 
     @Pattern(regexp = "^[a-zA-Z ]+$", message = "Surname must not contain numbers")
     @NotEmpty(message = "Surname should not be empty")
     @Size(min = 2, max = 30, message = "Surname should be between 2 and 30 characters")
     @Column(name = "surname")
     private String surname;
+
+    @Min(value = 0, message = "The age must be greater than 0")
+    @Column(name = "age")
+    private byte age;
 
     @NotEmpty(message = "Email should not be empty")
     @Email(message = "Email should be valid")
@@ -53,8 +54,8 @@ public class User {
     public User() {
     }
 
-    public User(String username, String surName, String email) {
-        this.username = username;
+    public User(String name, String surName, String email) {
+        this.name = name;
         this.surname = surName;
         this.email = email;
     }
@@ -75,12 +76,12 @@ public class User {
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSurname() {
@@ -89,6 +90,14 @@ public class User {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public byte getAge() {
+        return age;
+    }
+
+    public void setAge(byte age) {
+        this.age = age;
     }
 
     public String getEmail() {
@@ -119,8 +128,9 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
+                ", age='" + age + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
@@ -128,13 +138,15 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof User)) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(username, user.username) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email);
+        return age == user.age && Objects.equals(id, user.id) && Objects.equals(name, user.name)
+                && Objects.equals(surname, user.surname) && Objects.equals(email, user.email)
+                && Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, surname, email);
+        return Objects.hash(id, name, surname, age, email, password, roles);
     }
 }
